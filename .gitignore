@@ -1,0 +1,14 @@
+dist
+*~
+.bak
+*.lkshw
+*.lkshs
+*/tmp/*
+_darcs
+.ignore
+*.sqlite3
+*.aes
+delme*
+*log
+tags
+
