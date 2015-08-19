@@ -7,13 +7,12 @@ import System.Console.CmdArgs
 
 main :: IO ()
 main = do
-  simpleServer <- cmdArgs $ SimpleServer
-    { port = 8000 &= help "Port on which the server runs" &= opt (8000::Int) }
+  args <- cmdArgs $
+    simpleServerCmdArgs
     &= summary "SimpleServer v0.1"
-  let p = port simpleServer
-  putStrLn $ "Running simpleserver on port " ++ (show p)
+  let p = port args
+  putStrLn $ "SimpleServer running on port " ++ show p
   run p $ staticApp $ defaultFileServerSettings "."
-
 
 -- Command line arguments
 data SimpleServer = SimpleServer
@@ -21,3 +20,9 @@ data SimpleServer = SimpleServer
   }
   deriving (Data, Typeable)
 
+simpleServerCmdArgs :: SimpleServer
+simpleServerCmdArgs = SimpleServer
+    { port = 8000
+        &= help "Port on which the server runs"
+        &= opt (8000::Int)
+    }
