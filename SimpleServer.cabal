@@ -1,24 +1,25 @@
 -- SimpleServer: A simple static file server, for when apache is overkill
-
-name:                SimpleServer
-version:             0.1.0.0
-synopsis:            A simple static file server, for when apache is overkill
--- description:         
-license:             GPL-3
-license-file:        LICENSE
-author:              Anupam Jain
-maintainer:          ajnsit@gmail.com
--- copyright:           
-category:            Web
-build-type:          Simple
-cabal-version:       >=1.8
+name          : SimpleServer
+version       : 0.1.0.0
+synopsis      : A simple static file server, for when apache is overkill
+description   : A simple static file server, for when apache is overkill
+license       : MIT
+license-file  : LICENSE
+author        : Anupam Jain
+maintainer    : ajnsit@gmail.com
+category      : Web
+build-type    : Simple
+cabal-version : >=1.16
 
 executable simpleserver
-  main-is:             SimpleServer.hs
+  main-is            : SimpleServer.hs
   -- other-modules:       
-  build-depends:       base >=4 && <5,
-                       wai-app-static >=1.3 && <2,
-                       warp >=1.3 && <2,
-                       cmdargs >=0.9.7 && <1
+  build-depends      : base           >= 4.7  && < 4.9
+                     , wai-app-static >= 3.1  && < 3.2
+                     , warp           >= 3.1  && < 3.3
+                     , cmdargs        >= 0.10 && < 0.11
+  buildable          : True
+  hs-source-dirs     : src
+  default-language   : Haskell2010
 
 
