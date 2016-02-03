@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
-module Main where
+module SimpleServer where
 
 import Control.Monad (when)
 
@@ -7,22 +7,26 @@ import qualified Config.Dyre as Dyre
 import Network.Wai.Middleware.Routes
 import Network.Wai.Handler.Warp
 import System.Console.CmdArgs
+import System.Console.CmdArgs.Verbosity (isLoud)
+import Control.Monad.IO.Class (liftIO)
 
-main :: IO ()
-main = do
-  settings <- fetchCmdArgs
+realMain :: Handlers -> IO ()
+realMain handlers = do
+  settings <- cmdArgs simpleServerCmdArgs
+  loud <- isLoud
   let p = port settings
   putStrLn $ "SimpleServer running on port " ++ show p
-  run p $ waiApp $ application settings
+  run p $ waiApp $ application settings loud handlers
 
 
 ---------------------
 -- WAI Application --
 ---------------------
 
-application :: SimpleServerConfig -> RouteM ()
-application settings = do
-  when (loglevel settings > 0) $ middleware logStdoutDev
+application :: SimpleServerConfig -> Bool -> Handlers -> RouteM ()
+application settings loud handlers = do
+  when loud $ middleware logStdoutDev
+  handlers
   catchall $ staticApp $ defaultFileServerSettings $ static settings
 
 
@@ -33,15 +37,8 @@ application settings = do
 data SimpleServerConfig = SimpleServerConfig
   { port :: Int
   , static :: String
-  , loglevel :: Int
   }
   deriving (Data, Typeable)
-
-fetchCmdArgs :: IO SimpleServerConfig
-fetchCmdArgs = cmdArgs $
-    simpleServerCmdArgs
-    &= program "simpleserver"
-    &= summary "SimpleServer v0.1.1"
 
 simpleServerCmdArgs :: SimpleServerConfig
 simpleServerCmdArgs = SimpleServerConfig
@@ -51,25 +48,25 @@ simpleServerCmdArgs = SimpleServerConfig
     , static = "."
         &= help "Folder with the static files (default (\".\"))"
         &= opt ("."::String)
-    , loglevel = 0
-        &= help "Logging level (default 0)"
-        &= opt (0::Int)
     }
+    &= verbosity
+    &= program "simpleserver"
+    &= summary "SimpleServer v0.1.1"
 
 
 -----------------
 -- Dyre Config --
 -----------------
 
-confError :: String -> String -> String
-confError cfgMessage error = "Error:" ++ error ++ "\n" ++ cfgMessage
+type Handlers = RouteM ()
 
-realMain message = do
-    putStrLn "Entered Main Function"
-    putStrLn message
+-- TODO
+confError :: Handlers -> String -> Handlers
+confError handlers err = handler $ runHandlerM $ liftIO $ print $ "Error:" ++ err
 
-dyreExample = Dyre.wrapMain Dyre.defaultParams
-    { Dyre.projectName  = "dyreExample"
+simpleServer :: Handlers -> IO ()
+simpleServer = Dyre.wrapMain Dyre.defaultParams
+    { Dyre.projectName  = "simpleServer"
     , Dyre.showError    = confError
     , Dyre.realMain     = realMain
     }
