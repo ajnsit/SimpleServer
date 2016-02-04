@@ -11,6 +11,16 @@ category      : Web
 build-type    : Simple
 cabal-version : >=1.16
 
+source-repository head
+    type     : git
+    location : http://github.com/ajnsit/SimpleServer
+
+source-repository this
+    type     : git
+    location : http://github.com/ajnsit/SimpleServer/tree/v0.1.1.0
+    tag      : v0.1.1.0
+
+
 library
   exposed-modules    : SimpleServer
   build-depends      : base
