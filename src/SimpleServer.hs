@@ -69,7 +69,7 @@ simpleServerCmdArgs = SimpleServerConfig
     }
     &= verbosity
     &= program "simpleserver"
-    &= summary "SimpleServer v0.1.1"
+    &= summary "SimpleServer v0.1.1.1"
 
 
 -----------------

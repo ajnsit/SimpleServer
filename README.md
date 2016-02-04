@@ -1,5 +1,5 @@
-SimpleServer (SimpleServer 0.1.1)
-=================================
+SimpleServer (SimpleServer 0.1.1.1)
+===================================
 
 This package provides a simple file server which can be configured using haskell files (similar to xmonad).
 
@@ -24,7 +24,7 @@ Or if you prefer to use `stack` -
 Run with `--help` for usage information -
 
     $ simpleserver --help
-    SimpleServer v0.1.1
+    SimpleServer v0.1.1.1
 
     simpleserver [OPTIONS]
 
@@ -89,6 +89,6 @@ To see the path simpleserver expects the config file to be in, use '--paths'
 Changelog
 =========
 
-* 0.1.1 : Added static and logging. Use wai-routes
-* 0.1   : Intial release
-
+* 0.1.1.1 : Only cabal metadata changes
+* 0.1.1   : Added static and logging. Use wai-routes
+* 0.1     : Intial release

@@ -1,6 +1,6 @@
 -- SimpleServer: A simple static file server, for when apache is overkill
 name          : SimpleServer
-version       : 0.1.1.0
+version       : 0.1.1.1
 synopsis      : A simple static file server, for when apache is overkill
 description   : A simple static file server, for when apache is overkill
 license       : MIT
@@ -17,8 +17,8 @@ source-repository head
 
 source-repository this
     type     : git
-    location : http://github.com/ajnsit/SimpleServer/tree/v0.1.1.0
-    tag      : v0.1.1.0
+    location : http://github.com/ajnsit/SimpleServer/tree/v0.1.1.1
+    tag      : v0.1.1.1
 
 
 library
