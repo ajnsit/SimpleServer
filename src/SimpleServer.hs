@@ -8,35 +8,40 @@ where
 
 import Control.Monad (when)
 import Control.Monad.IO.Class (liftIO)
-import qualified Config.Dyre as Dyre
-import qualified Config.Dyre.Paths as Dyre
-import Network.Wai.Middleware.Routes
-import Network.Wai.Handler.Warp
-import System.Console.CmdArgs
 
-realMain :: Handlers -> IO ()
-realMain handlers = do
-  settings <- cmdArgs simpleServerCmdArgs
-  if paths settings
-    then do
-      (_,_,p,_,_) <- Dyre.getPaths simpleServerDyreParams
-      putStrLn p
-    else do
-      loud <- isLoud
-      let p = port settings
-      putStrLn $ "SimpleServer running on port " ++ show p
-      run p $ waiApp $ application settings loud handlers
+import Config.Dyre
+import Config.Dyre.Paths
+import System.Console.CmdArgs
+import Network.Wai.Handler.Warp
+import Network.Wai.Middleware.Routes
 
 
 ---------------------
 -- WAI Application --
 ---------------------
 
-application :: SimpleServerConfig -> Bool -> Handlers -> RouteM ()
-application settings loud handlers = do
-  when loud $ middleware logStdoutDev
+runHandlers :: Handlers -> IO ()
+runHandlers handlers = do
+  settings <- cmdArgs simpleServerCmdArgs
+  if paths settings
+    then do
+      (_,_,p,_,_) <- getPaths simpleServerDyreParams
+      putStrLn p
+    else do
+      v <- getVerbosity
+      let p = port settings
+      logVerbose v $ "SimpleServer running on port " ++ show p
+      run p $ waiApp $ application settings v handlers
+
+application :: SimpleServerConfig -> Verbosity -> Handlers -> RouteM ()
+application settings v handlers = do
+  when (v == Loud) $ middleware logStdoutDev
   handlers
   catchall $ staticApp $ defaultFileServerSettings $ static settings
+
+logVerbose :: Verbosity -> String -> IO ()
+logVerbose Quiet _ = return ()
+logVerbose _ s = putStrLn s
 
 
 ----------------------------
@@ -78,11 +83,11 @@ confError :: Handlers -> String -> Handlers
 confError _ err = handler $ runHandlerM $ liftIO $ putStrLn $ "Error:" ++ err
 
 simpleServer :: Handlers -> IO ()
-simpleServer = Dyre.wrapMain simpleServerDyreParams
+simpleServer = wrapMain simpleServerDyreParams
 
-simpleServerDyreParams :: Dyre.Params Handlers
-simpleServerDyreParams = Dyre.defaultParams
-    { Dyre.projectName  = "simpleServer"
-    , Dyre.showError    = confError
-    , Dyre.realMain     = realMain
+simpleServerDyreParams :: Params Handlers
+simpleServerDyreParams = defaultParams
+    { projectName  = "simpleServer"
+    , showError    = confError
+    , realMain     = runHandlers
     }

@@ -1,11 +1,12 @@
 SimpleServer (SimpleServer 0.1.1)
 =================================
 
-This package provides a simple static file server.
+This package provides a simple file server which can be configured using haskell files (similar to xmonad).
 
 Features:
   - Provides folder index listings
   - Serves static files from the specified folder
+  - Fully configurable using haskell configuration files
 
 Usage
 ======
@@ -30,10 +31,13 @@ Run with `--help` for usage information -
     Common flags:
       -p --port[=INT]       Port on which the server runs (default 8000)
       -s --static[=ITEM]    Folder with the static files (default ("."))
-      -l --loglevel[=INT]   Logging level (default 0)
+         --paths            Print the expected path to the simpleserver config
       -? --help             Display help message
       -V --version          Print version information
          --numeric-version  Print just the version number
+      -v --verbose          Loud verbosity
+      -q --quiet            Quiet verbosity
+
 
 Basically run from any directory that you wish to serve files from.
 
@@ -63,11 +67,23 @@ For example, to serve files from 'static' folder -
 
 ## 3. Log level
 
-To enable logging, use '-l' argument. Currently, any number greater than 0 enables basic logging. More detailed logging is in the works.
+To enable logging, use '-v' or '--verbose. To disable any log output altogether use '-q' or '--quiet'
 
-    $ simpleserver -l1
+
+    $ simpleserver
+    Running on port 8000
+
+    $ simpleserver --verbose
     Running on port 8000
     127.0.0.1 - - [03/Feb/2016:11:10:49 +0530] "GET / HTTP/1.1" 200 - "" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0"
+
+    $ simpleserver --verbose
+    
+
+## 4. Paths
+
+To see the path simpleserver expects the config file to be in, use '--paths'
+
 
 
 Changelog
@@ -75,3 +91,4 @@ Changelog
 
 * 0.1.1 : Added static and logging. Use wai-routes
 * 0.1   : Intial release
+
