@@ -25,7 +25,7 @@ library
 
 executable simpleserver
   main-is            : Main.hs
-  build-depends      : base
+  build-depends      : base >= 4.7 && < 4.9
                      , wai-routes
                      , warp
                      , cmdargs
