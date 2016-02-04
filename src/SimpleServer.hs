@@ -1,14 +1,17 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
-module SimpleServer where
+module SimpleServer
+( module Network.Wai.Middleware.Routes
+, module Control.Monad.IO.Class
+, simpleServer
+)
+where
 
 import Control.Monad (when)
-
+import Control.Monad.IO.Class (liftIO)
 import qualified Config.Dyre as Dyre
 import Network.Wai.Middleware.Routes
 import Network.Wai.Handler.Warp
 import System.Console.CmdArgs
-import System.Console.CmdArgs.Verbosity (isLoud)
-import Control.Monad.IO.Class (liftIO)
 
 realMain :: Handlers -> IO ()
 realMain handlers = do
@@ -60,12 +63,15 @@ simpleServerCmdArgs = SimpleServerConfig
 
 type Handlers = RouteM ()
 
--- TODO
+-- TODO: This only prints errors on incoming requests
 confError :: Handlers -> String -> Handlers
-confError handlers err = handler $ runHandlerM $ liftIO $ print $ "Error:" ++ err
+confError _ err = handler $ runHandlerM $ liftIO $ putStrLn $ "Error:" ++ err
 
 simpleServer :: Handlers -> IO ()
-simpleServer = Dyre.wrapMain Dyre.defaultParams
+simpleServer = Dyre.wrapMain simpleServerDyreParams
+
+simpleServerDyreParams :: Dyre.Params Handlers
+simpleServerDyreParams = Dyre.defaultParams
     { Dyre.projectName  = "simpleServer"
     , Dyre.showError    = confError
     , Dyre.realMain     = realMain
