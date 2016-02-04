@@ -9,6 +9,7 @@ where
 import Control.Monad (when)
 import Control.Monad.IO.Class (liftIO)
 import qualified Config.Dyre as Dyre
+import qualified Config.Dyre.Paths as Dyre
 import Network.Wai.Middleware.Routes
 import Network.Wai.Handler.Warp
 import System.Console.CmdArgs
@@ -16,10 +17,15 @@ import System.Console.CmdArgs
 realMain :: Handlers -> IO ()
 realMain handlers = do
   settings <- cmdArgs simpleServerCmdArgs
-  loud <- isLoud
-  let p = port settings
-  putStrLn $ "SimpleServer running on port " ++ show p
-  run p $ waiApp $ application settings loud handlers
+  if paths settings
+    then do
+      (_,_,p,_,_) <- Dyre.getPaths simpleServerDyreParams
+      putStrLn p
+    else do
+      loud <- isLoud
+      let p = port settings
+      putStrLn $ "SimpleServer running on port " ++ show p
+      run p $ waiApp $ application settings loud handlers
 
 
 ---------------------
@@ -40,6 +46,7 @@ application settings loud handlers = do
 data SimpleServerConfig = SimpleServerConfig
   { port :: Int
   , static :: String
+  , paths :: Bool
   }
   deriving (Data, Typeable)
 
@@ -48,9 +55,12 @@ simpleServerCmdArgs = SimpleServerConfig
     { port = 8000
         &= help "Port on which the server runs (default 8000)"
         &= opt (8000::Int)
+        &= name "p"
     , static = "."
         &= help "Folder with the static files (default (\".\"))"
         &= opt ("."::String)
+    , paths = False
+        &= help "Print the expected path to the simpleserver config"
     }
     &= verbosity
     &= program "simpleserver"
