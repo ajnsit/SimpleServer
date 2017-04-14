@@ -44,9 +44,9 @@ Basically run from any directory that you wish to serve files from.
 Configuration
 =============
 
-You can install custom handlers on top of vanilla simple-server using a haskell configuration file.
+You can install custom handlers on top of vanilla simpleServer using a haskell configuration file.
 
-For example, lets say you want to keep a count of the number of requests made and print them out to the console. Then you can add a config file that looks like this -
+For example, let's say you want to keep a count of the number of requests made and print them out to the console. Then you can add a config file that looks like this -
 
 ```haskell
 -- You must import SimpleServer
@@ -65,7 +65,7 @@ main = do
     handler $ runHandlerM $ do
 
       -- Fetch the current count
-      times <- liftIO$ readIORef timesRef
+      times <- liftIO $ readIORef timesRef
       
       -- Print current count
       liftIO $ putStrLn $ "Request number " ++ show times
@@ -78,7 +78,7 @@ main = do
     next
 ```
 
-SimpleServer uses wai-routes to immplement handlers. See the documentation for [wai-routes](https://github.com/ajnsit/wai-routes) to see more examples of how to write custom handlers.
+SimpleServer uses wai-routes to implement handlers. See the documentation for [wai-routes](https://github.com/ajnsit/wai-routes) to see more examples of custom handlers.
 
 
 Options
