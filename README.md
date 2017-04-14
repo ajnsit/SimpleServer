@@ -41,6 +41,46 @@ Run with `--help` for usage information -
 
 Basically run from any directory that you wish to serve files from.
 
+Configuration
+=============
+
+You can install custom handlers on top of vanilla simple-server using a haskell configuration file.
+
+For example, lets say you want to keep a count of the number of requests made and print them out to the console. Then you can add a config file that looks like this -
+
+```haskell
+-- You must import SimpleServer
+import SimpleServer
+-- IORefs can be used to persist data in volatile memory
+import Data.IORef
+
+-- The entry point into simpleServer
+main = do
+  -- Create a new IORef to keep track of the number of requests made so far
+  timesRef <- newIORef 0
+  -- Call simpleServer with custom handlers
+  simpleServer $ do
+
+    -- Our one and only handler, uses a special DSL syntax (executed with `runHandlerM`)
+    handler $ runHandlerM $ do
+
+      -- Fetch the current count
+      times <- liftIO$ readIORef timesRef
+      
+      -- Print current count
+      liftIO $ putStrLn $ "Request number " ++ show times
+      
+      -- Increment current count and save it back
+      liftIO $ writeIORef timesRef (times + 1)
+
+    -- Continue processing the request with simpleServer
+    -- You can omit this call to abort processing
+    next
+```
+
+SimpleServer uses wai-routes to immplement handlers. See the documentation for [wai-routes](https://github.com/ajnsit/wai-routes) to see more examples of how to write custom handlers.
+
+
 Options
 =======
 
