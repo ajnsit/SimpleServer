@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 module SimpleServer
-( module Network.Wai.Middleware.Routes
+( module Wai.Routes
 , module Control.Monad.IO.Class
 , simpleServer
 )
@@ -13,7 +13,7 @@ import Config.Dyre
 import Config.Dyre.Paths
 import System.Console.CmdArgs
 import Network.Wai.Handler.Warp
-import Network.Wai.Middleware.Routes
+import Wai.Routes
 
 
 ---------------------
