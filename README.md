@@ -1,4 +1,4 @@
-SimpleServer (SimpleServer 0.1.1.1)
+SimpleServer (SimpleServer 0.1.1.2)
 ===================================
 
 This package provides a simple file server which can be configured using haskell files (similar to xmonad).
@@ -66,10 +66,10 @@ main = do
 
       -- Fetch the current count
       times <- liftIO $ readIORef timesRef
-      
+
       -- Print current count
       liftIO $ putStrLn $ "Request number " ++ show times
-      
+
       -- Increment current count and save it back
       liftIO $ writeIORef timesRef (times + 1)
 
@@ -118,7 +118,7 @@ To enable logging, use '-v' or '--verbose. To disable any log output altogether 
     127.0.0.1 - - [03/Feb/2016:11:10:49 +0530] "GET / HTTP/1.1" 200 - "" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0"
 
     $ simpleserver --verbose
-    
+
 
 ## 4. Paths
 
@@ -129,6 +129,7 @@ To see the path simpleserver expects the config file to be in, use '--paths'
 Changelog
 =========
 
+* 0.1.1.2 : Minor changes
 * 0.1.1.1 : Only cabal metadata changes
 * 0.1.1   : Added static and logging. Use wai-routes
 * 0.1     : Intial release
