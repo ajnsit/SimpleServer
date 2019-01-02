@@ -25,6 +25,7 @@ library
   exposed-modules    : SimpleServer
   build-depends      : base
                      , wai-routes
+                     , wai-app-static
                      , warp
                      , cmdargs
                      , dyre
@@ -35,8 +36,9 @@ library
 
 executable simpleserver
   main-is            : Main.hs
-  build-depends      : base >= 4.7 && < 4.10
+  build-depends      : base >= 4.7 && < 4.12
                      , wai-routes
+                     , wai-app-static
                      , warp
                      , cmdargs
                      , dyre

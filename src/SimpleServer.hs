@@ -13,6 +13,7 @@ import Config.Dyre
 import Config.Dyre.Paths
 import System.Console.CmdArgs
 import Network.Wai.Handler.Warp
+import Network.Wai.Application.Static (staticApp, defaultFileServerSettings)
 import Wai.Routes
 
 
