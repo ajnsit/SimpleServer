@@ -36,7 +36,7 @@ library
 
 executable simpleserver
   main-is            : Main.hs
-  build-depends      : base >= 4.7 && < 4.12
+  build-depends      : base
                      , wai-routes
                      , wai-app-static
                      , warp
